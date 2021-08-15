@@ -73,7 +73,7 @@
                                     <td class="text-center">{{$produto->capsula_id != null ? $produto->capsulas->quantidade : '-'}}</td>
                                     <td class="text-center">{{$produto->peso_id != null ? $produto->pesos->peso : '-'}}</td>
                                     <td class="text-center">{{$produto->quantidade_id != null ? $produto->quantidades->quantidade : '-'}}</td>
-                                    <td class="text-center">{{DB::table('entradas')->get()->where('id', $produto->id)->sum()}}</td>
+                                    <td class="text-center"></td>
                                     <td class="text-center"><a href="{{route('entrada.cadastrar', ['produto' => $produto->id])}}">Entrada</a></td>
                                     <td class="text-center"><a href="#">Saída</a></td>
                                     <td class="text-center"><a href="#">Excluir</a></td>

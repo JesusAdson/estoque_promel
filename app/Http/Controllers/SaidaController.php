@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Saida;
 use Illuminate\Http\Request;
 
 class SaidaController extends Controller
@@ -41,10 +40,10 @@ class SaidaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Saida  $saida
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Saida $saida)
+    public function show($id)
     {
         //
     }
@@ -52,10 +51,10 @@ class SaidaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Saida  $saida
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Saida $saida)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +63,10 @@ class SaidaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Saida  $saida
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Saida $saida)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +74,10 @@ class SaidaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Saida  $saida
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Saida $saida)
+    public function destroy($id)
     {
         //
     }

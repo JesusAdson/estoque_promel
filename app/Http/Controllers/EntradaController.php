@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entrada;
-use Illuminate\Http\Request;
-use App\Models\Produto;
 use App\Models\Estoque;
+use App\Models\Produto;
+use Illuminate\Http\Request;
 
 class EntradaController extends Controller
 {
@@ -37,29 +36,28 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-        Entrada::create($request->all());
-        return redirect()->route('produto.index');
+        Estoque::create($request->all());
+        return redirect()->route('entrada.listar')->with('success' ,'Cadastrado com sucesso');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Entrada  $entrada
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Entrada $entrada)
+    public function show($id)
     {
-        //
+        
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Entrada  $estoque
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Entrada $entrada)
+    public function edit($id)
     {
         //
     }
@@ -68,10 +66,10 @@ class EntradaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Entrada  $Entrada
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Entrada $entrada)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -79,10 +77,10 @@ class EntradaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Estoque  $Estoque
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Entrada $entrada)
+    public function destroy($id)
     {
         //
     }
