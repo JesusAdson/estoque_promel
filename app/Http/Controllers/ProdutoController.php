@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produto;
+use App\Models\Estoque;
 use App\Models\Peso;
 use App\Models\Quantidade;
 use App\Models\Tipo;
 use App\Models\Capsula;
 use Hamcrest\Core\IsNull;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 use function PHPUnit\Framework\isEmpty;
 use function PHPUnit\Framework\isNull;
@@ -28,9 +30,24 @@ class ProdutoController extends Controller
     public function index()
     {
         $produtos = Produto::with(['tipo'])->orderBy('nome', 'asc')->paginate(10);
-        //dd($produtos);
         $tipos = Tipo::all();
+        // retornando a quantidade no estoque de cada produto
+
+
+        //dd($estoque);
         return view('produtos.listar', ['produtos' => $produtos, 'tipos' => $tipos]);
+    }
+
+    public static function estoque($id){
+        $estoque = Estoque::select('produto_id', Estoque::raw('SUM(quantidade) as total_estoque'))
+        ->where('produto_id', $id)
+        ->groupBy('produto_id')
+        ->get()
+        ->toArray();
+        //recuperando o somente a quantidade_estoque do produto
+        //Arr::get($array, [posicao da key])
+        $estoque_total = Arr::get($estoque, '0.total_estoque', 0);
+        return $estoque_total;
     }
 
     /**
@@ -117,7 +134,12 @@ class ProdutoController extends Controller
         ];
 
         $request->validate($regras, $feedback);
-        Produto::create($request->all());
+        $produto = Produto::create($request->all());
+        //ao cadastrar um produto, juntamente se cria um estoque desse produto
+        Estoque::create([
+            'quantidade' => 0,
+            'produto_id' => $produto->id
+        ]);
         return redirect()->route('produto.index');
 
     }

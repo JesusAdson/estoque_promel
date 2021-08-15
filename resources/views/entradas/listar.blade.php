@@ -25,7 +25,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr></tr>
+                                @foreach ($entradas as $entrada )
+                                        <tr>
+                                            <td>{{$entrada->produto->nome}}</td>
+                                            <td>{{$entrada->produto->lote}}</td>
+                                            <td>{{$entrada->quantidade_entrada}}</td>
+                                            <td>{{$entrada->data_entrada->format('d/m/Y')}}</td>
+                                        </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

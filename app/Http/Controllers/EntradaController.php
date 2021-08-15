@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Entrada;
 use App\Models\Estoque;
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class EntradaController extends Controller
 {
@@ -15,7 +17,8 @@ class EntradaController extends Controller
      */
     public function index()
     {
-        return view('entradas.listar');
+        $entradas = Entrada::all();
+        return view('entradas.listar', ['entradas' => $entradas]);
     }
 
     /**
@@ -25,6 +28,7 @@ class EntradaController extends Controller
      */
     public function create(Produto $produto)
     {
+
         return view('entradas.cadastrar', ['produto' => $produto]);
     }
 
@@ -36,8 +40,19 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
-        Estoque::create($request->all());
-        return redirect()->route('entrada.listar')->with('success' ,'Cadastrado com sucesso');
+        Entrada::create($request->all());
+        
+        $estoque = Estoque::where('produto_id', $request->produto_id)->get()->toArray();
+        //pegando o valor atual do estoque para somar com a quantidade de entrada
+        $valor_atual = Arr::get($estoque, '0.quantidade');
+
+        //atualizando a quantidade de produtos no estoque, com base na quantidade da entrada
+        Estoque::where('produto_id', $request->produto_id)
+        ->update([
+            'quantidade' => $valor_atual + $request->quantidade_entrada
+        ]);
+        
+        return redirect()->route('entrada.listar')->with('success', 'Entrada cadastrada com sucesso.');
     }
 
     /**

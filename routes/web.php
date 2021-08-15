@@ -29,4 +29,4 @@ Route::prefix('/entrada')->group(function(){
     Route::get('listar', 'App\Http\Controllers\EntradaController@index')->name('entrada.listar');
     Route::get('cadastrar/{produto}', 'App\Http\Controllers\EntradaController@create')->name('entrada.cadastrar');
     Route::post('cadastrar', 'App\Http\Controllers\EntradaController@store')->name('entrada.cadastrar.post');
-});
+   });

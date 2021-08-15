@@ -49,7 +49,6 @@
                                     <th scope="col">Lote</th>
                                     <th scope="col">Fab.</th>
                                     <th scope="col">Val.</th>
-                                    <th scope="col">Estoque</th>
                                     <th scope="col">Categoria</th>
                                     <th scope="col">Caps/Comp</th>
                                     <th scope="col">Peso(g)</th>
@@ -68,12 +67,11 @@
                                     <td>{{$produto->lote}}</td>
                                     <td>{{$produto->dataFab->format('d/m/Y')}}</td>
                                     <td>{{$produto->dataVal->format('d/m/Y')}}</td>
-                                    <td>Estoque</td>
                                     <td>{{$produto->tipo->descricao}}</td>
                                     <td class="text-center">{{$produto->capsula_id != null ? $produto->capsulas->quantidade : '-'}}</td>
                                     <td class="text-center">{{$produto->peso_id != null ? $produto->pesos->peso : '-'}}</td>
                                     <td class="text-center">{{$produto->quantidade_id != null ? $produto->quantidades->quantidade : '-'}}</td>
-                                    <td class="text-center"></td>
+                                    <td class="text-center">{{App\Http\Controllers\ProdutoController::estoque($produto->id)}}</td>
                                     <td class="text-center"><a href="{{route('entrada.cadastrar', ['produto' => $produto->id])}}">Entrada</a></td>
                                     <td class="text-center"><a href="#">Saída</a></td>
                                     <td class="text-center"><a href="#">Excluir</a></td>
