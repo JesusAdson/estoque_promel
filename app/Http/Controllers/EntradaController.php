@@ -40,6 +40,18 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
+
+        $regras = [
+            'quantidade_entrada' => 'required',
+            'data_entrada' => 'required' 
+        ];
+        $feedback = [
+            'quantidade_entrada.required' => 'O campo quantidade deve ser preenchido.',
+            'data_entrada.required' => 'A data deve ser preenchida'
+        ];
+
+        $request->validate($regras, $feedback);
+
         Entrada::create($request->all());
         
         $estoque = Estoque::where('produto_id', $request->produto_id)->get()->toArray();

@@ -38,7 +38,7 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Entrada/Saída<span class="caret"></span></a>
                                  <ul class="dropdown-menu" role="menu">
                                     <li class="dropdown-item"><a class="nav-link" href="{{route('entrada.listar')}}">Listar todas as entradas</a></li>
-                                    <li class="dropdown-item"><a class="nav-link" href="">Listar todas as saídas</a></li>
+                                    <li class="dropdown-item"><a class="nav-link" href="{{route('saida.listar')}}">Listar todas as saídas</a></li>
                                  </ul>
                             </li>
                         </ul>

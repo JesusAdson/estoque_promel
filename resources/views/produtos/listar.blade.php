@@ -73,7 +73,7 @@
                                     <td class="text-center">{{$produto->quantidade_id != null ? $produto->quantidades->quantidade : '-'}}</td>
                                     <td class="text-center">{{App\Http\Controllers\ProdutoController::estoque($produto->id)}}</td>
                                     <td class="text-center"><a href="{{route('entrada.cadastrar', ['produto' => $produto->id])}}">Entrada</a></td>
-                                    <td class="text-center"><a href="#">Saída</a></td>
+                                    <td class="text-center"><a href="{{route('saida.cadastrar', ['produto' => $produto->id])}}">Saída</a></td>
                                     <td class="text-center"><a href="#">Excluir</a></td>
                                     <td class="text-center"><a href="#">Editar</a></td>
                                 </tr>

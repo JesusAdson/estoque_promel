@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Estoque;
 use Illuminate\Http\Request;
+use App\Models\Produto;
+use App\Models\Saida;
+use Illuminate\Support\Arr;
 
 class SaidaController extends Controller
 {
@@ -13,7 +17,8 @@ class SaidaController extends Controller
      */
     public function index()
     {
-        //
+        $saidas = Saida::all();
+        return view('saidas.listar', ['saidas' => $saidas]);
     }
 
     /**
@@ -21,9 +26,9 @@ class SaidaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Produto $produto)
     {
-        //
+        return view('saidas.cadastrar', ['produto' => $produto]);
     }
 
     /**
@@ -33,8 +38,36 @@ class SaidaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $regras = [
+            'quantidade_saida' => 'required',
+            'data_saida' => 'required' 
+        ];
+        $feedback = [
+            'quantidade_saida.required' => 'O campo quantidade deve ser preenchido.',
+            'data_saida.required' => 'A data deve ser preenchida'
+        ];
+
+        $request->validate($regras, $feedback);
+        //Busca na base de dados o produto
+        $estoque = Estoque::where('produto_id', $request->produto_id)->get()->toArray();
+        //armazena a quantidade atual do estoque desse produto
+        $valor_atual = Arr::get($estoque, '0.quantidade', 0);
+        //verifica se a quantidade atual - a quantidade que o usuario inseriu não é < 0;
+        if(($valor_atual - $request->quantidade_saida) < 0){
+            //se for < 0 então redireciona pra rota de cadastro de saidas com o erro abaixo
+            return redirect()->route('saida.cadastrar', ['produto' => $request->produto_id])
+            ->with('error', 'Quantidade de saída é maior que a quantidade do estoque');
+        }
+        //caso contrário atualiza no estoque a quantidade atual - a qtd inserida
+        Estoque::where('produto_id', $request->produto_id)->update([
+            'quantidade' => $valor_atual - $request->quantidade_saida
+        ]);
+        // cadastra na table saidas a saida q foi feita
+        Saida::create($request->all());
+        //retorna pra view saida.listar com uma mensagem de sucesso 
+        return redirect()->route('saida.listar')->with('success', 'Saída cadastrada com sucesso.');
+
     }
 
     /**

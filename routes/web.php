@@ -30,3 +30,9 @@ Route::prefix('/entrada')->group(function(){
     Route::get('cadastrar/{produto}', 'App\Http\Controllers\EntradaController@create')->name('entrada.cadastrar');
     Route::post('cadastrar', 'App\Http\Controllers\EntradaController@store')->name('entrada.cadastrar.post');
    });
+
+Route::prefix('/saida')->group(function(){
+    Route::get('listar', 'App\Http\Controllers\SaidaController@index')->name('saida.listar');
+    Route::get('listar/{produto}', 'App\Http\Controllers\SaidaController@create')->name('saida.cadastrar');
+    Route::post('listar', 'App\Http\Controllers\SaidaController@store')->name('saida.cadastrar.post');
+});
