@@ -6,7 +6,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header text-center">{{ __('Listagem dos Produtos') }}</div>
-
+                    @if(Session::has('stored'))
+                        <div class="alert alert-success" role="alert">{{Session::get('stored')}}</div>
+                    @endif
+                    @if(Session::has('updated'))
+                        <div class="alert alert-success" role="alert">{{Session::get('updated')}}</div>
+                     @endif
+                     @if (Session::has('error'))
+                        <div class="alert alert-danger" role="alert">{{Session::get('error')}}</div> 
+                     @endif
                     <div class="card-body">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
@@ -42,6 +50,13 @@
                             </div>
                         </div>
                         <br>
+                        @if(Session::has('error'))
+                            <div class="alert alert-danger" role="alert">{{Session::get('error')}}</div>
+                        @endif
+                        @if(Session::has('success'))
+                            <div class="alert alert-success" role="alert">{{Session::get('success')}}</div>
+                        @endif
+                        <br>
                         <table id="table" class="table table-responsive-lg table-hover">
                             <thead class="thead-gray">
                                 <tr>
@@ -74,8 +89,14 @@
                                     <td class="text-center">{{App\Http\Controllers\ProdutoController::estoque($produto->id)}}</td>
                                     <td class="text-center"><a href="{{route('entrada.cadastrar', ['produto' => $produto->id])}}">Entrada</a></td>
                                     <td class="text-center"><a href="{{route('saida.cadastrar', ['produto' => $produto->id])}}">Saída</a></td>
-                                    <td class="text-center"><a href="#">Excluir</a></td>
-                                    <td class="text-center"><a href="#">Editar</a></td>
+                                    <td class="text-center">
+                                        <form id="form_{{$produto->id}}" action="{{route('produto.remove', ['produto' => $produto->id])}}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <a href="" onclick="document.getElementById('form_{{$produto->id}}').submit()">Excluir</a>
+                                        </form>
+                                    </td>
+                                    <td class="text-center"><a href="{{route('produto.edit', ['produto' => $produto->id])}}">Editar</a></td>
                                 </tr>
                             @endforeach
 

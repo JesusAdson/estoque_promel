@@ -14,6 +14,7 @@ class Produto extends Model
 {
     use HasFactory;
 
+
     protected $dateFormat = 'Y-m-d';
 
     protected $dates = ['dataFab', 'dataVal'];

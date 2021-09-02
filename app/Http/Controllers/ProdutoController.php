@@ -29,7 +29,7 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        $produtos = Produto::with(['tipo'])->orderBy('nome', 'asc')->paginate(10);
+        $produtos = Produto::where('deleted', '0')->with(['tipo'])->orderBy('nome', 'asc')->paginate(10);
         $tipos = Tipo::all();
         // retornando a quantidade no estoque de cada produto
 
@@ -140,7 +140,7 @@ class ProdutoController extends Controller
             'quantidade' => 0,
             'produto_id' => $produto->id
         ]);
-        return redirect()->route('produto.index');
+        return redirect()->route('produto.index')->with('stored', 'Produto cadastrado.');
 
     }
 
@@ -179,7 +179,19 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        //
+        $tipos = Tipo::all();
+        $capsulas = Capsula::all();
+        $pesos = Peso::all();
+        $quantidades = Quantidade::all();
+        return view('produtos.editar', 
+        [
+            'tipos' => $tipos, 
+            'capsulas' => $capsulas, 
+            'pesos' => $pesos, 
+            'quantidades' => $quantidades,
+            'produto' => $produto
+        ]);
+
     }
 
     /**
@@ -191,7 +203,27 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, Produto $produto)
     {
-        //
+        $regras = 
+        [
+            'nome' => 'required|min:3',
+            'dataFab' => 'required',
+            'dataVal' => 'required',
+            'lote' => 'required',
+            'tipo_id' => 'required'
+        ];
+
+        $feedback = 
+        [
+            'required' => 'O campo :attribute deve ser preenchido.',
+            'dataFab.required' => 'A data de fabricação deve ser preenchida.',
+            'dataVal.required' => 'A data de validade deve ser preenchida.',
+            'tipo_id.required' => 'O campo deve ser preenchido'
+        ];
+
+        $request->validate($regras, $feedback);
+
+        $produto->update($request->all());
+        return redirect()->route('produto.index')->with('updated', 'Produto atualizado.');
     }
 
     /**
@@ -200,8 +232,21 @@ class ProdutoController extends Controller
      * @param  \App\Models\Produto  $produto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Produto $produto)
+    public function remove(Request $request, Produto $produto)
     {
-        //
+        dd($produto);
+        //Busca na base de dados o produto
+        $estoque = Estoque::where('produto_id', $produto->id)->get()->toArray();
+        //armazena a quantidade atual do estoque desse produto
+        $valor_atual = Arr::get($estoque, '0.quantidade', 0);
+        if($valor_atual > 0){
+            return redirect()->route('produto.index')->with('error', 'Não é possível excluir um produto com estoque');
+        }
+
+        //atualiza na base de dados a coluna deleted para 1 e assim não aparecerá mais nas pesquisas
+        $produto->update([
+            'deleted' => 1
+        ]);
+        //return redirect()->route('produto.index')->with('success', 'Produto excluido com sucesso.');
     }
-}
+} 

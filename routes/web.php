@@ -24,6 +24,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::resource('produto', 'App\Http\Controllers\ProdutoController');
 Route::post('produto/{produto}', 'App\Http\Controllers\ProdutoController@show')->name('produto.show');
+Route::patch('produto/{produto}','App\Http\Controllers\ProdutoController@remove')->name('produto.remove');
 
 Route::prefix('/entrada')->group(function(){
     Route::get('listar', 'App\Http\Controllers\EntradaController@index')->name('entrada.listar');
